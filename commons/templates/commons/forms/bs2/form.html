@@ -1,0 +1,73 @@
+{% load generic %}
+{% load widget_tweaks %}
+
+
+{% comment %}
+
+To use this form template:
+{% include "form.html" with form=form foo=bar %}
+
+TODO: create an inclusion tag for this
+
+{% endcomment %}
+
+
+{% block extra_head %}
+  {{ form.media }}
+{% endblock %}
+
+<form
+  {% if form|hasattrib:"method" and form.method|lower != "get" %}method="{{ form.method|lower }}"{% endif %}
+  {% if form|hasattrib:"action" %}action="{{ form.action }}"{% endif %}
+  {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}>
+
+  {% if form|hasattrib:"method" and form.method|lower == "post" %}
+    {% csrf_token %}
+  {% endif %}
+
+  {{ form.non_field_errors }}
+
+  {% for hidden_field in form.hidden_fields %}
+    {{ hidden_field }}
+  {% endfor %}
+
+  <fieldset>
+    {% if form|hasattrib:"legend" %}
+      <legend>{{ form.legend }}</legend>
+    {% endif %}
+
+    {% for field in form.visible_fields %}
+    <div class="control-group{% if field.errors %} error{% elif form.is_bound %} success{% endif %}">
+      <label for="{{ field.id_for_label }}" class="{{ label_class }}">
+        {{ field.label }}
+        {% if field.field.required %}<span class="asterisk">*</span>{% endif %}
+      </label>
+
+      <div class="controls">
+        {{ field }}
+
+        {% if field.help_text %}
+        <span class="help-block">{{ field.help_text }}</span>
+        {% endif %}
+
+        {% if field.errors %}
+          <ol>
+          {% for error in field.errors %}
+            <li><strong>{{ error|escape }}</strong></li>
+          {% endfor %}
+          </ol>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </fieldset>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">
+      {% trans 'Submit' %}
+    </button>
+    <button type="reset" class="btn">
+      {% trans 'Cancel' %}
+    </button>
+  </div>
+</form>
