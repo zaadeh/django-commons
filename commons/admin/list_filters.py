@@ -2,18 +2,19 @@
 Taken from:
 https://medium.com/@hakibenita/how-to-add-a-text-filter-to-django-admin-5d1db93772d8
 """
+from __future__ import unicode_literals, print_function, absolute_import
 
 from django.db.models import Q
 
 
 class InputFilter(admin.SimpleListFilter):
     """
-    This is class, if listed in `ModelAdmin.list_filter` allowes custom
+    This class, if listed in `ModelAdmin.list_filter` allowes custom
     filtering logic and presentation in admin's side panel.
 
-    refer to: https://docs.djangoproject.com/en/dev/ref/contrib/admin/#django.contrib.admin.ModelAdmin.list_filter
+    See: https://docs.djangoproject.com/en/dev/ref/contrib/admin/#django.contrib.admin.ModelAdmin.list_filter
 
-    a class inheriting from django.contrib.admin.SimpleListFilter, which you
+    A class inheriting from django.contrib.admin.SimpleListFilter, which you
     need to provide the title and parameter_name attributes to and override
     the lookups and queryset methods.
     """
