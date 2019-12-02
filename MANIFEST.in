@@ -1,2 +1,3 @@
 include README.rst
-include docs/*.txt
+recursive-include docs *.py *.txt *.rst
+prune docs/build

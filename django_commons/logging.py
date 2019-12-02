@@ -1,9 +1,24 @@
+# -*- coding: utf-8 -*-
 import logging.config  # needed when logging_config doesn't start with logging.config
 
-from commons.middleware.thread_locals import get_current_user
+from django.contrib.auth import get_user_model
+
+from django_commons.middleware.thread_locals import (get_current_request,
+    get_current_user)
 
 
 class HttpRequestFilter(logging.Filter):
+    """
+    Attach the current django request object to the logging record.
+    """
+
+    def filter(self, record):
+        current_request = get_current_request()
+        record.request = current_request
+        return True
+
+
+class HttpUserFilter(logging.Filter):
     """
     Attach the name of the currently logged in user to the logging record.
 
@@ -17,13 +32,22 @@ class HttpRequestFilter(logging.Filter):
     implicitly. This solution makes some assumptions about how the
     application is run and so is considered hacky to a degree.
 
-    If no user has logged in, the string "anon" will be attached.
+    If no user has logged in, the string "<anon>" will be attached.
     """
 
     def filter(self, record):
         logged_in_user = get_current_user()
         if not logged_in_user:
-            record.username = 'anon'
+            record.username = '<anon>'
         else:
+            assert isinstance(logged_in_user, get_user_model())
             record.username = logged_in_user.username
         return True
+
+
+class AMQPLogHandler(logging.Handler):
+    """
+    Push the logging record into an AMQP message broker.
+    """
+    # TODO
+    pass

@@ -9,7 +9,7 @@ from django.db.models import Q
 
 class InputFilter(admin.SimpleListFilter):
     """
-    This class, if listed in `ModelAdmin.list_filter` allowes custom
+    This class, if listed in `ModelAdmin.list_filter` allows custom
     filtering logic and presentation in admin's side panel.
 
     See: https://docs.djangoproject.com/en/dev/ref/contrib/admin/#django.contrib.admin.ModelAdmin.list_filter
@@ -54,4 +54,3 @@ class UserFilter(InputFilter):
             )
 
         return queryset.filter(any_name)
-
