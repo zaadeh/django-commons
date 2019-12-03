@@ -22,4 +22,3 @@ class ValidateModelMixin(object):
         """Call :meth:`full_clean` before saving."""
         self.full_clean()
         super(ValidateModelMixin, self).save(*args, **kwargs)
-
