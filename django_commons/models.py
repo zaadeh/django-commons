@@ -31,7 +31,7 @@ def get_user_profile_model():
     Assuming there is only one model class with a OneToOne relationship
     with Django's `User` model, this function tries to find and return it.
     Other models that need to have arelation to `User` model, should instead
-    define the relationsship to user profile model. This approach has the
+    define the relationsship to user profile model. This provision has the
     added advantage that makes it easier to port the application to other
     web frameworks.
 

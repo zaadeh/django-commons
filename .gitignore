@@ -41,5 +41,3 @@ tags
 *.sock
 *.lock
 
-/deploy/build/
-/src/static/
