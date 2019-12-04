@@ -43,7 +43,7 @@ classifiers = [
 ]
 
 setup(name='django-commons',
-    version='1.0.1',
+    version='0.1.2',
     description='Common Django Utilities',
     long_description=long_description,
     keywords=['commons', 'django', 'utilities'],
