@@ -22,3 +22,21 @@ class ValidateModelMixin(object):
         """Call :meth:`full_clean` before saving."""
         self.full_clean()
         super(ValidateModelMixin, self).save(*args, **kwargs)
+
+
+def get_user_profile_model():
+    """
+    This function should return the user profile class dynamically.
+
+    Assuming there is only one model class with a OneToOne relationship
+    with Django's `User` model, this function tries to find and return it.
+    Other models that need to have arelation to `User` model, should instead
+    define the relationsship to user profile model. This approach has the
+    added advantage that makes it easier to port the application to other
+    web frameworks.
+
+    This function should work like `django.contrib.auth.get_user_mode()`,
+    except for finding the `UserProfile` or similar model.
+    """
+    # TODO
+    pass
