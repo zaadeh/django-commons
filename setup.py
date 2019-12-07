@@ -12,6 +12,7 @@ with open('README.rst') as f:
 install_requires = [
     'setuptools',
     'django>=1.11',
+    'six',
     'pytz',
     'bleach',
     'jdatetime',
@@ -43,7 +44,7 @@ classifiers = [
 ]
 
 setup(name='django-commons',
-    version='0.1.2',
+    version='0.1.3',
     description='Common Django Utilities',
     long_description=long_description,
     keywords=['commons', 'django', 'utilities'],

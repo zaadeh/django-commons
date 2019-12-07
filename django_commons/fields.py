@@ -7,6 +7,51 @@ from django.utils.translation import ugettext_lazy as _
 __all__ = ['SerialField', 'SmallSerialField', 'BigSerialField']
 
 
+def get_changes_between_objects(object1, object2, excludes=[]):
+    """
+    Finds the changes between the common fields on two model objects.
+    Useful when we need to compare old and new instance of an object,
+    for example in a pre_save signal receiver.
+
+    :param object1: The first object
+    :param object2: The second object
+    :param excludes: A list of field names to exclude
+    """
+    changes = {}
+
+    # For every field in the model
+    for field in object1._meta.fields:
+        # Don't process excluded fields or automatically updating fields
+        if not field.name in excludes and not isinstance(field, fields.AutoField):
+            # If the field isn't a related field (i.e. a foreign key)..
+            if not isinstance(field, fields.related.RelatedField):
+                old_val = field.value_from_object(object1)
+                new_val = field.value_from_object(object2)
+                # If the old value doesn't equal the new value, and they're
+                # not both equivalent to null (i.e. None and "")
+                if old_val != new_val and not(not old_val and not new_val):
+                    changes[field.verbose_name] = (old_val, new_val)
+
+            # If the field is a related field..
+            elif isinstance(field, fields.related.RelatedField):
+                if field.value_from_object(object1) != field.value_from_object(object2):
+                    old_pk = field.value_from_object(object1)
+                    try:
+                        old_val = field.related.parent_model.objects.get(pk=old_pk)
+                    except field.related.parent_model.DoesNotExist:
+                        old_val = None
+
+                    new_pk = field.value_from_object(object2)
+                    try:
+                        new_val = field.related.parent_model.objects.get(pk=new_pk)
+                    except field.related.parent_model.DoesNotExist:
+                        new_val = None
+
+                    changes[field.verbose_name] = (old_val, new_val)
+
+    return changes
+
+
 class SerialField(models.IntegerField):
     """
     Django does not allow more than one `AutoField` on a model, because
