@@ -2,9 +2,14 @@
 
 try:
     from setuptools import setup, find_packages
+    from setuptools.command.test import test as TestCommand
 except ImportError:
     from distutils.core import setup, find_packages
 
+
+with open('django_commons/__init__.py') as f:
+    # to evaluate the package version string
+    exec(f.read())
 
 with open('README.rst') as f:
     long_description = f.read()
@@ -43,8 +48,19 @@ classifiers = [
     'Framework :: Django',
 ]
 
+class PyTest(TestCommand):
+    def finalize_options(self):
+        TestCommand.finalize_options(self)
+        self.test_args = []
+        self.test_suite = True
+
+    def run_tests(self):
+        import pytest
+        errcode = pytest.main(self.test_args)
+        sys.exit(errcode)
+
 setup(name='django-commons',
-    version='0.1.3',
+    version=__version__,
     description='Common Django Utilities',
     long_description=long_description,
     keywords=['commons', 'django', 'utilities'],
@@ -60,7 +76,11 @@ setup(name='django-commons',
     include_package_data=True,
     install_requires=install_requires,
     scripts=[],
+    tests_require=['nose', 'nose-cover3', 'pytest'],
     test_suite='nose.collector',
-    tests_require=['nose', 'nose-cover3'],
+    cmdclass={'test': PyTest},
+    extras_require={
+        'testing': ['pytest'],
+    }
     zip_safe=False
 )
