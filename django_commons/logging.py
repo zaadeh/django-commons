@@ -14,6 +14,9 @@ class HttpRequestFilter(logging.Filter):
 
     def filter(self, record):
         current_request = get_current_request()
+        if hasattr(record, 'request'):
+            logger.warning("Will not overwrite an existing request attribute on the logging record")
+            return True
         record.request = current_request
         return True
 
@@ -37,6 +40,9 @@ class HttpUserFilter(logging.Filter):
 
     def filter(self, record):
         logged_in_user = get_current_user()
+        if hasattr(record, 'username'):
+            logger.warning("Will not overwrite an existing username attribute on the logging record")
+            return True
         if not logged_in_user:
             record.username = '<anon>'
         else:

@@ -87,27 +87,26 @@ def users_with_perm(perm_name, include_superusers=False, exclude_superusers=Fals
             Q(groups__permissions__content_type__app_label=app_label))
 
     if include_superusers:
-        q = get_user_model().objects.filter(
-            Q(is_superuser=True) | lookup)
+        lookup = Q(is_superuser=True) | lookup
     elif exclude_superusers:
-        q = get_user_model().objects.filter(
-            Q(is_superuser=False) & lookup)
-    else:
-        q = get_user_model().objects.filter(lookup)
+        lookup = Q(is_superuser=False) & lookup
+
+    q = get_user_model().objects.filter(lookup)
 
     #return q.distinct()
     return q
 
 
-def users_with_perms(perms, include_superusers=False, exclude_superusers=False, combine='intersection'):
+def users_with_perms(perms, include_superusers=False, exclude_superusers=False,
+        combine='intersection'):
     """
-    Returna a queryset with union or intersection of all users with given permissions.
+    Return a queryset with union or intersection of all users with given permissions.
 
     Takes a list of permissions and returns either union or intersection of
     individual querysets that return users with a single permission.
 
-    Make sure that he list of permissions is reasonably small, otherwise
-    this can result in a very big database query.
+    Make sure that the list of permissions is reasonably small, otherwise
+    this can result in a very big query body being sent ot the db.
     """
     assert isinstance(perms, (list, tuple))
     assert combine in ['union', 'intersection'], 'either union or intersection must be set'

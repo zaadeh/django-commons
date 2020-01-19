@@ -13,8 +13,8 @@ def get_user_manager(**kwargs):
     class UserSubsetManager(models.Manager):
         """
         This manager class overrides the default queryset object to only
-        return model instances which have a relation to the current logged in
-        user.
+        return model instances which have a relation to the currently
+        logged in user.
 
         If this custom manager is set as the default manager for a model,
         it has the very nice advantage that it works for related objects too.
@@ -37,10 +37,11 @@ def get_user_manager(**kwargs):
 
         def get_queryset(self):
             """
-            Limit the quesryset to set of records with a relation to current user.
+            Limit the quesryset to set of records with a relation to the
+            current user.
             """
 
-            # Be ware that by relying on the implicit user, we are going
+            # Beware that by relying on the implicit user, we are going
             # around MVC separation, by sharing the logged-in user object
             # among controller and model layers.
             current_user = get_current_user()

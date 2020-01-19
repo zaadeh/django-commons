@@ -12,11 +12,12 @@ logger = logging.getLogger(__name__)
 
 def is_request_for_form(request, form):
     """
-    Return true if the request includes all of the required or at least one
-    of the non-required fields from the given form in GET parameters.
-    This is useful when we have a view which optionally processes one or more
-    forms with the GET method and we want to be able to distinguish whether
-    view should process normally or process one of the forms.
+    Return true if the request includes all of the required or at least
+    one of the non-required fields from the given form in GET parameters.
+    This is useful when we have a view which optionally processes one
+    or more submitted forms with the GET method and we want to be able
+    to distinguish whether the view should process normally (as if no
+    form is submitted) or process one of the forms.
     """
 
     assert isinstance(request, HttpRequest)

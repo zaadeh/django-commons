@@ -1,18 +1,22 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function, absolute_import
+from __future__ import absolute_import, print_function, unicode_literals
 
+import logging
 import string
 
-from django.core.exceptions import ValidationError, ImproperlyConfigured
+from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.utils.translation import ugettext as _
+
+logger = logging.getLogger(__name__)
 
 
 class MinPerCharClassPasswordValidator(object):
     """
-    A password validation class which can enforce a minimum number each of
-    various classes of characters (digits, alphabetical, lowercase, uppercase,
-    and special symbols). It can also optionally check that in each character
-    class, the minimum number of characters differ from each other.
+    A password validation class which can enforce a minimum number of
+    characters in each of various classes of characters (digits,
+    alphabetical, lowercase, uppercase, and special symbols). It can
+    also optionally check that for characters in each character class,
+    they differ from each other.
     """
 
     def __init__(self, min_digit=1, min_alpha=1, min_lowercase=1, min_uppercase=1,
@@ -23,10 +27,14 @@ class MinPerCharClassPasswordValidator(object):
         self.min_uppercase = min_uppercase
         self.min_special = min_special
         self.must_vary = must_vary
-        if not any(int(getattr(self, attr)) for attr in [
-            'min_digit', 'min_alpha', 'min_lowercase', 'min_uppercase', 'min_special'
-            ]):
-            raise ImproperlyConfigured("At least one class of characters must be set to a positive integer")
+        try:
+            if not any(int(getattr(self, attr)) for attr in [
+                'min_digit', 'min_alpha', 'min_lowercase', 'min_uppercase', 'min_special'
+                ]):
+                raise ImproperlyConfigured("At least one class of characters must be set to a positive integer")
+        except ValueError:
+            logger.error("Only integer parameters are acceptable")
+            raise
 
     def password_changed(self, password, user=None):
         """

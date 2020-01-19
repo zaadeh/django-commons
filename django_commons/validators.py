@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function, absolute_import
+from __future__ import absolute_import, print_function, unicode_literals
 
 import json
 import logging
 
+import jsonschema
 from django.core import validators
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.utils.deconstruct import deconstructible
 from django.utils.translation import ugettext, ugettext_lazy as _
-import jsonschema
-
 
 logger = logging.getLogger(__name__)
 
@@ -68,6 +67,7 @@ def validate_json(json_obj, schema=None, version=4):
             logger.debug("failed to load the string as valid JSON document: '{}'".format(e))
             raise ValidationError(_("Failed to load the string as valid JSON document"))
 
+    # TODO: implement different jsonschema versions
     if schema:
         try:
             jsonschema.validate(instance=json_obj, schema=schema)
@@ -120,4 +120,3 @@ class JSONSchemaValidator(object):
         Validate that the given document passes JSON schema validation rules.
         """
         validate_json(value, self._schema)
-

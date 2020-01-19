@@ -2,9 +2,14 @@
 Taken from:
 https://medium.com/@hakibenita/how-to-add-a-text-filter-to-django-admin-5d1db93772d8
 """
-from __future__ import unicode_literals, print_function, absolute_import
+from __future__ import absolute_import, print_function, unicode_literals
+
+import logging
 
 from django.db.models import Q
+from django.utils.translation import ugettext as _
+
+logger = logging.getLogger(__name__)
 
 
 class InputFilter(admin.SimpleListFilter):
@@ -38,7 +43,7 @@ class InputFilter(admin.SimpleListFilter):
 
 class UserFilter(InputFilter):
     parameter_name = 'user'
-    title = _('User')
+    title = _("User")
 
     def queryset(self, request, queryset):
         term = self.value()
