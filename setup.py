@@ -48,6 +48,7 @@ classifiers = [
     'Framework :: Django',
 ]
 
+
 class PyTest(TestCommand):
     def finalize_options(self):
         TestCommand.finalize_options(self)
@@ -56,10 +57,13 @@ class PyTest(TestCommand):
 
     def run_tests(self):
         import pytest
+
         errcode = pytest.main(self.test_args)
         sys.exit(errcode)
 
-setup(name='django-commons',
+
+setup(
+    name='django-commons',
     version=__version__,
     description='Common Django Utilities',
     long_description=long_description,
@@ -79,8 +83,6 @@ setup(name='django-commons',
     tests_require=['nose', 'nose-cover3', 'pytest'],
     test_suite='nose.collector',
     cmdclass={'test': PyTest},
-    extras_require={
-        'testing': ['pytest'],
-    }
-    zip_safe=False
+    extras_require={'testing': ['pytest'],},
+    zip_safe=False,
 )
