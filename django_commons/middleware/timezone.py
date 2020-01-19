@@ -30,7 +30,9 @@ class TimezoneMiddleware(MiddlewareMixin):
 
     def process_request(self, request):
         if not hasattr(request, 'session'):
-            logger.warn('timezone middleware depends on request sessions. possible wrong middleware order?')
+            logger.warn(
+                'timezone middleware depends on request sessions. possible wrong middleware order?'
+            )
             return
 
         tz_session_key = getattr(settings, 'TZ_SESSION_KEY', 'request_timezone')
@@ -39,16 +41,22 @@ class TimezoneMiddleware(MiddlewareMixin):
             try:
                 # sets the time zone for the current thread
                 timezone.activate(pytz.timezone(tz_name))
-                logger.debug('setting tz from session. current tz: "{}"'.format(
-                    timezone.get_current_timezone()))
+                logger.debug(
+                    'setting tz from session. current tz: "{}"'.format(
+                        timezone.get_current_timezone()
+                    )
+                )
             except Exception as e:
                 logger.exception(e)
         else:
             try:
                 # activate the timezone set in django settings as a default
                 timezone.activate(timezone.get_default_timezone())
-                logger.debug('setting tz to default. current tz: "{}"'.format(
-                    timezone.get_current_timezone()))
+                logger.debug(
+                    'setting tz to default. current tz: "{}"'.format(
+                        timezone.get_current_timezone()
+                    )
+                )
             except Exception as e:
                 logger.exception(e)
 

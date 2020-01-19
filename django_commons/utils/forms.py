@@ -23,7 +23,9 @@ def is_request_for_form(request, form):
     assert isinstance(request, HttpRequest)
     assert isinstance(form, (forms.Form, forms.ModelForm))
     required_fields = [field for field in form.fields if form.fields[field].required]
-    optional_fields = [field for field in form.fields if not form.fields[field].required]
+    optional_fields = [
+        field for field in form.fields if not form.fields[field].required
+    ]
     if required_fields and all([field in request.GET for field in required_fields]):
         return True
     if any([field in request.GET for field in optional_fields]):

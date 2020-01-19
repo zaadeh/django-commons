@@ -27,8 +27,9 @@ def get_user_manager(**kwargs):
             try:
                 self.user_rel = kwargs['user_rel']
             except KeyError:
-                raise ImproperlyConfigured("'user_rel' parameter is required in {}".format(
-                    self.__class__))
+                raise ImproperlyConfigured(
+                    "'user_rel' parameter is required in {}".format(self.__class__)
+                )
             self.exempt_superuser = kwargs.get('exempt_superuser', True)
             self.exempt_staff = kwargs.get('exempt_staff', False)
             self.exempt_perm = kwargs.get('exempt_perm', 'access_all_records')
@@ -56,11 +57,8 @@ def get_user_manager(**kwargs):
             if self.exempt_perm and current_user.has_perm(self.exempt_perm):
                 return super(UserSubsetManager, self).get_queryset()
 
-            filter_params = {
-                self.user_rel: current_user
-            }
-            return super(UserSubsetManager, self).get_queryset().filter(
-                **filter_params)
+            filter_params = {self.user_rel: current_user}
+            return super(UserSubsetManager, self).get_queryset().filter(**filter_params)
 
         def for_user(self, user=get_current_user()):
             """
@@ -68,10 +66,7 @@ def get_user_manager(**kwargs):
 
             This manager method can be explicitly called in views
             """
-            filter_params = {
-                self.user_rel: user
-            }
-            return super(UserSubsetManager, self).get_queryset().filter(
-                **filter_params)
+            filter_params = {self.user_rel: user}
+            return super(UserSubsetManager, self).get_queryset().filter(**filter_params)
 
     return UserSubsetManager(**kwargs)

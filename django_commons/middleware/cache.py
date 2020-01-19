@@ -11,6 +11,7 @@ class DisableClientSideCachingMiddleware(MiddlewareMixin):
     This middleware can be used for testing and debugging cache issues
     in web browsers and intermediary web proxies.
     """
+
     def process_response(self, request, response):
         add_never_cache_headers(response)
         return response

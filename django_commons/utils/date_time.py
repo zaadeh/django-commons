@@ -37,7 +37,9 @@ def in_active_timezone(value, noexp=False):
             if not noexp:
                 raise
             else:
-                logger.warning("a naive datetime with ambiguous value received: '{}'".format(value))
+                logger.warning(
+                    "a naive datetime with ambiguous value received: '{}'".format(value)
+                )
                 # One correction strategy is to always assume a fixed value
                 # of True or False for is_dst.
                 # Another strategy is to assume that the datetime value has
@@ -54,7 +56,11 @@ def in_active_timezone(value, noexp=False):
             if not noexp:
                 raise
             else:
-                logger.warning("a naive datetime with non-existent value received: '{}'".format(value))
+                logger.warning(
+                    "a naive datetime with non-existent value received: '{}'".format(
+                        value
+                    )
+                )
                 # Here we assume that transition to DST has resulted in the
                 # wall clock to jump forward, but for whatever reason the
                 # system wall clock has failed to follow. So we let pytz
@@ -69,10 +75,16 @@ def in_active_timezone(value, noexp=False):
         tz_name_active = timezone.get_current_timezone_name()
         tz_name_default = timezone.get_default_timezone_name()
         if tz_active != tz_default:
-            logger.debug("current tz '{}' differs from default '{}'".format(
-                tz_name_active, tz_name_default))
+            logger.debug(
+                "current tz '{}' differs from default '{}'".format(
+                    tz_name_active, tz_name_default
+                )
+            )
         if value.tzinfo == tz_active:
-            logger.debug("the value is already in the current timezone '{}' : '{}'".format(
-                value.tzinfo, tz_active))
+            logger.debug(
+                "the value is already in the current timezone '{}' : '{}'".format(
+                    value.tzinfo, tz_active
+                )
+            )
         result = timezone.localtime(value)
     return result

@@ -16,6 +16,7 @@ class DecimalEncoder(json.JSONEncoder):
     `django.core.serializers.DjangoJSONEncoder` that in addition to decimals,
     can handle `date`, `time`, `datetime`, `UUID`, etc.
     """
+
     def default(self, obj):
         if isinstance(obj, Decimal):
             return float(obj)

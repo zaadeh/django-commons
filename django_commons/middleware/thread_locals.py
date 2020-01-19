@@ -36,8 +36,11 @@ class TLSRequest(MiddlewareMixin):
 
     def process_request(self, request):
         if not hasattr(request, 'user'):
-            raise ImproperlyConfigured("'{}' needs to be placed after django auth middleware".format(
-                self.__class__))
+            raise ImproperlyConfigured(
+                "'{}' needs to be placed after django auth middleware".format(
+                    self.__class__
+                )
+            )
 
         _thread_locals.request = request
 

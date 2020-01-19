@@ -23,7 +23,8 @@ def jdtformat(value, fmt='%c', locale='fa_IR'):
     elif isinstance(value, jdatetime.datetime):
         pass
     else:
-        raise NotImplementedError('type "{}" not supported for jdformat filter'.format(
-            type(value)))
+        raise NotImplementedError(
+            'type "{}" not supported for jdformat filter'.format(type(value))
+        )
 
     return dt.strftime(fmt)

@@ -29,7 +29,7 @@ def get_changes_between_objects(object1, object2, excludes=[]):
                 new_val = field.value_from_object(object2)
                 # If the old value doesn't equal the new value, and they're
                 # not both equivalent to null (i.e. None and "")
-                if old_val != new_val and not(not old_val and not new_val):
+                if old_val != new_val and not (not old_val and not new_val):
                     changes[field.verbose_name] = (old_val, new_val)
 
             # If the field is a related field..
@@ -67,6 +67,7 @@ class SerialField(models.IntegerField):
     additional query by the ORM to fetch the value assigned to the field
     by the database.
     """
+
     description = _("PostgreSQL serial field")
     default_error_messages = {
         'unsupported_dbms': _("Current DBMS is not supported"),
@@ -81,20 +82,24 @@ class SerialField(models.IntegerField):
         return []
         # TODO: find the current model and its database engine.
         if connection.settings_dict['ENGINE'] not in [
-                'django.db.backends.postgresql',
-                'django.db.backends.postgresql_psycopg2']:
+            'django.db.backends.postgresql',
+            'django.db.backends.postgresql_psycopg2',
+        ]:
             return [
                 checks.Error(
-                    '{} can only be used with PostgreSQL'.format(self.__class__.__name__),
-                    obj=self
+                    '{} can only be used with PostgreSQL'.format(
+                        self.__class__.__name__
+                    ),
+                    obj=self,
                 ),
             ]
         return []
 
     def check_dbms(self, connection):
         if connection.settings_dict['ENGINE'] not in [
-                'django.db.backends.postgresql',
-                'django.db.backends.postgresql_psycopg2']:
+            'django.db.backends.postgresql',
+            'django.db.backends.postgresql_psycopg2',
+        ]:
             raise exceptions.ImproperlyConfigured(
                 '{} can only be used with PostgreSQL'.format(self.__class__.__name__)
             )
@@ -105,14 +110,12 @@ class SerialField(models.IntegerField):
 
 
 class SmallSerialField(models.BigIntegerField, SerialField):
-
     def db_type(self, connection):
         self.check_dbms(connection)
         return 'smallserial'
 
 
 class BigSerialField(models.BigIntegerField, SerialField):
-
     def db_type(self, connection):
         self.check_dbms(connection)
         return 'bigserial'

@@ -32,14 +32,12 @@ class NoDeleteModelAdmin(admin.ModelAdmin):
 
 
 class NoAddModelAdmin(admin.ModelAdmin):
-
     def has_add_permission(self, request, obj=None):
         """Disable add button."""
         return False
 
 
 class NoChangeModelAdmin(admin.ModelAdmin):
-
     def has_change_permission(self, request, obj=None):
         """Disable changes in admin."""
         return False
@@ -58,6 +56,10 @@ class AssignUserModelAdmin(admin.ModelAdmin):
         """To assign the current logged-in user to the creator_user field
         """
         # TODO: find the actual user relation field name
+        # for field in obj._meta.fields:
+        # if isinstance(field, models.fields.related.RelatedField)
+        # models.field.value_from_object(obj)
+
         if not change or not obj.creator_user:
             user = get_user_model().objects.get(username=request.user.username)
             obj.creator_user = user

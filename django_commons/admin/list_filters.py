@@ -53,9 +53,8 @@ class UserFilter(InputFilter):
 
         any_name = Q()
         for bit in term.split():
-            any_name &= (
-                Q(user__first_name__icontains=bit) |
-                Q(user__last_name__icontains=bit)
+            any_name &= Q(user__first_name__icontains=bit) | Q(
+                user__last_name__icontains=bit
             )
 
         return queryset.filter(any_name)

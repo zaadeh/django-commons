@@ -17,8 +17,9 @@ import six
 logger = logging.getLogger(__name__)
 
 
-def req_passes_test(test_func, login_url=None,
-    redirect_field_name=REDIRECT_FIELD_NAME, is_403=False):
+def req_passes_test(
+    test_func, login_url=None, redirect_field_name=REDIRECT_FIELD_NAME, is_403=False
+):
     """
     This decorator is mostly the same as `user_passes_test` decorator in
     Django, except instead of just `request.user` it makes the entire `request`
@@ -27,6 +28,7 @@ def req_passes_test(test_func, login_url=None,
     Optionally if test fails, return error code 403, instead of redirecting
     to login page.
     """
+
     def decorator(view_func):
         @wraps(view_func, assigned=available_attrs(view_func))
         def _wrapped_view(request, *args, **kwargs):
@@ -40,14 +42,17 @@ def req_passes_test(test_func, login_url=None,
             # use the path as the "next" url.
             login_scheme, login_netloc = urlparse(resolved_login_url)[:2]
             current_scheme, current_netloc = urlparse(path)[:2]
-            if ((not login_scheme or login_scheme == current_scheme) and
-                    (not login_netloc or login_netloc == current_netloc)):
+            if (not login_scheme or login_scheme == current_scheme) and (
+                not login_netloc or login_netloc == current_netloc
+            ):
                 path = request.get_full_path()
-            logger.debug('redirecting to "{}", next "{}"'.format(
-                resolved_login_url, path))
-            return redirect_to_login(
-                path, resolved_login_url, redirect_field_name)
+            logger.debug(
+                'redirecting to "{}", next "{}"'.format(resolved_login_url, path)
+            )
+            return redirect_to_login(path, resolved_login_url, redirect_field_name)
+
         return _wrapped_view
+
     return decorator
 
 
@@ -70,7 +75,9 @@ def users_with_perm(perm_name, include_superusers=False, exclude_superusers=Fals
     problems.
     """
     assert isinstance(perm_name, six.string_types)
-    assert not (include_superusers and exclude_superusers), 'both actively including and excluding superusers is contradictory'
+    assert not (
+        include_superusers and exclude_superusers
+    ), 'both actively including and excluding superusers is contradictory'
 
     if '.' in perm_name:
         app_label, code_name = perm_name.split('.', 2)
@@ -78,13 +85,17 @@ def users_with_perm(perm_name, include_superusers=False, exclude_superusers=Fals
         app_label = None
         code_name = perm_name
 
-    lookup = Q(user_permissions__codename=code_name) | \
-        Q(groups__permissions__codename=code_name)
+    lookup = Q(user_permissions__codename=code_name) | Q(
+        groups__permissions__codename=code_name
+    )
     if app_label:
-        lookup = (Q(user_permissions__codename=code_name) & \
-            Q(user_permissions__content_type__app_label=app_label)) | \
-            (Q(groups__permissions__codename=code_name) & \
-            Q(groups__permissions__content_type__app_label=app_label))
+        lookup = (
+            Q(user_permissions__codename=code_name)
+            & Q(user_permissions__content_type__app_label=app_label)
+        ) | (
+            Q(groups__permissions__codename=code_name)
+            & Q(groups__permissions__content_type__app_label=app_label)
+        )
 
     if include_superusers:
         lookup = Q(is_superuser=True) | lookup
@@ -93,12 +104,13 @@ def users_with_perm(perm_name, include_superusers=False, exclude_superusers=Fals
 
     q = get_user_model().objects.filter(lookup)
 
-    #return q.distinct()
+    # return q.distinct()
     return q
 
 
-def users_with_perms(perms, include_superusers=False, exclude_superusers=False,
-        combine='intersection'):
+def users_with_perms(
+    perms, include_superusers=False, exclude_superusers=False, combine='intersection'
+):
     """
     Return a queryset with union or intersection of all users with given permissions.
 
@@ -109,7 +121,10 @@ def users_with_perms(perms, include_superusers=False, exclude_superusers=False,
     this can result in a very big query body being sent ot the db.
     """
     assert isinstance(perms, (list, tuple))
-    assert combine in ['union', 'intersection'], 'either union or intersection must be set'
+    assert combine in [
+        'union',
+        'intersection',
+    ], 'either union or intersection must be set'
 
     if combine == 'union':
         q = get_user_model().objects.none()
@@ -120,5 +135,7 @@ def users_with_perms(perms, include_superusers=False, exclude_superusers=False,
         if combine == 'union':
             q = q.union(users_with_perm(perm, include_superusers, exclude_superusers))
         else:
-            q = q.intersection(users_with_perm(perm, include_superusers, exclude_superusers))
+            q = q.intersection(
+                users_with_perm(perm, include_superusers, exclude_superusers)
+            )
     return q

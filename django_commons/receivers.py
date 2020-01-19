@@ -4,11 +4,9 @@ from __future__ import absolute_import, print_function, unicode_literals
 import logging
 
 from django.contrib.auth import get_user_model
-from django.core.signals import (got_request_exception, request_finished,
-                                 request_started)
+from django.core.signals import got_request_exception, request_finished, request_started
 from django.db.backends.signals import connection_created
-from django.db.models.signals import (post_delete, post_save, pre_delete,
-                                      pre_save)
+from django.db.models.signals import post_delete, post_save, pre_delete, pre_save
 from django.dispatch import receiver
 
 from .models import get_user_profile_model
@@ -16,7 +14,7 @@ from .models import get_user_profile_model
 logger = logging.getLogger(__name__)
 
 
-#@receiver(connection_created)
+# @receiver(connection_created)
 def setup_db_connection(connection, **kwargs):
     """
     Perform per-connection setup like settings connection parameters.
@@ -29,7 +27,7 @@ def setup_db_connection(connection, **kwargs):
             cursor.execute(sql)
 
 
-#@receiver([post_save], sender=get_user_model(),
+# @receiver([post_save], sender=get_user_model(),
 #    dispatch_uid='ensure_call_once__save_user_profile')
 def save_user_profile(sender, **kwargs):
     """
@@ -40,8 +38,9 @@ def save_user_profile(sender, **kwargs):
         # optional list of user profile fields dependent on user fields
         # 'username': inst.username
     }
-    obj, is_created = get_user_profile_model().objects.get_or_create(user=inst,
-        **defaults)
+    obj, is_created = get_user_profile_model().objects.get_or_create(
+        user=inst, **defaults
+    )
     if kwargs.get('created', False):
         if is_created:
             logger.debug('user profile created: "{}"'.format(obj))
@@ -51,7 +50,7 @@ def save_user_profile(sender, **kwargs):
     obj.save()
 
 
-#@receiver([post_delete], sender=get_user_model(),
+# @receiver([post_delete], sender=get_user_model(),
 #    dispatch_uid='ensure_call_once__delete_user_profile')
 def delete_user_profile(sender, **kwargs):
     """

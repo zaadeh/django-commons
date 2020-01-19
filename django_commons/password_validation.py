@@ -19,8 +19,15 @@ class MinPerCharClassPasswordValidator(object):
     they differ from each other.
     """
 
-    def __init__(self, min_digit=1, min_alpha=1, min_lowercase=1, min_uppercase=1,
-            min_special=1, must_vary=False):
+    def __init__(
+        self,
+        min_digit=1,
+        min_alpha=1,
+        min_lowercase=1,
+        min_uppercase=1,
+        min_special=1,
+        must_vary=False,
+    ):
         self.min_digit = min_digit
         self.min_alpha = min_alpha
         self.min_lowercase = min_lowercase
@@ -28,10 +35,19 @@ class MinPerCharClassPasswordValidator(object):
         self.min_special = min_special
         self.must_vary = must_vary
         try:
-            if not any(int(getattr(self, attr)) for attr in [
-                'min_digit', 'min_alpha', 'min_lowercase', 'min_uppercase', 'min_special'
-                ]):
-                raise ImproperlyConfigured("At least one class of characters must be set to a positive integer")
+            if not any(
+                int(getattr(self, attr))
+                for attr in [
+                    'min_digit',
+                    'min_alpha',
+                    'min_lowercase',
+                    'min_uppercase',
+                    'min_special',
+                ]
+            ):
+                raise ImproperlyConfigured(
+                    "At least one class of characters must be set to a positive integer"
+                )
         except ValueError:
             logger.error("Only integer parameters are acceptable")
             raise
@@ -74,30 +90,59 @@ class MinPerCharClassPasswordValidator(object):
             self.raise_error()
 
     def get_help_text(self):
-        return _("Your password must include some of uppercase, lowercase, digits and special characters")
+        return _(
+            "Your password must include some of uppercase, lowercase, digits and special characters"
+        )
 
     def raise_error(self):
         err_list = []
 
         if self.min_digit:
-            err_list.append("{} ".format(self.min_digit)
-                + (_("distinct") + " " if self.must_vary and self.min_digit > 1 else "") + _("digit"))
+            err_list.append(
+                "{} ".format(self.min_digit)
+                + (_("distinct") + " " if self.must_vary and self.min_digit > 1 else "")
+                + _("digit")
+            )
 
         if self.min_alpha:
-            err_list.append("{} ".format(self.min_alpha)
-                + (_("distinct") + " " if self.must_vary and self.min_alpha > 1 else "") + _("alphabetical" ))
+            err_list.append(
+                "{} ".format(self.min_alpha)
+                + (_("distinct") + " " if self.must_vary and self.min_alpha > 1 else "")
+                + _("alphabetical")
+            )
 
         if self.min_lowercase:
-            err_list.append("{} ".format(self.min_lowercase)
-                + (_("distinct") + " " if self.must_vary and self.min_lowercase > 1 else "") + _("lowercase"))
+            err_list.append(
+                "{} ".format(self.min_lowercase)
+                + (
+                    _("distinct") + " "
+                    if self.must_vary and self.min_lowercase > 1
+                    else ""
+                )
+                + _("lowercase")
+            )
 
         if self.min_uppercase:
-            err_list.append("{} ".format(self.min_uppercase)
-                + (_("distinct") + " " if self.must_vary and self.min_uppercase > 1 else "") + _("uppercase"))
+            err_list.append(
+                "{} ".format(self.min_uppercase)
+                + (
+                    _("distinct") + " "
+                    if self.must_vary and self.min_uppercase > 1
+                    else ""
+                )
+                + _("uppercase")
+            )
 
         if self.min_special:
-            err_list.append("{} ".format(self.min_special)
-                + (_("distinct") + " " if self.must_vary and self.min_special > 1 else "") + _("special"))
+            err_list.append(
+                "{} ".format(self.min_special)
+                + (
+                    _("distinct") + " "
+                    if self.must_vary and self.min_special > 1
+                    else ""
+                )
+                + _("special")
+            )
 
         err = _("Password must contain at least these characters:")
         raise ValidationError(err + " " + ", ".join(err_list))

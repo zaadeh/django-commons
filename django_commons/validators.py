@@ -51,7 +51,9 @@ def validate_jsonschema(schema, version=4):
         validator_class.check_schema(json_obj)
     except jsonschema.SchemaError as e:
         logger.debug("failed to validate JSON schema document: '{}'".format(e))
-        raise ValidationError(' '.join((_("Failed to validate JSON schema document"), e.message)))
+        raise ValidationError(
+            ' '.join((_("Failed to validate JSON schema document"), e.message))
+        )
 
 
 def validate_json(json_obj, schema=None, version=4):
@@ -64,7 +66,9 @@ def validate_json(json_obj, schema=None, version=4):
         try:
             json_obj = json.loads(json_obj)
         except (ValueError, json.JSONDecodeError) as e:
-            logger.debug("failed to load the string as valid JSON document: '{}'".format(e))
+            logger.debug(
+                "failed to load the string as valid JSON document: '{}'".format(e)
+            )
             raise ValidationError(_("Failed to load the string as valid JSON document"))
 
     # TODO: implement different jsonschema versions
@@ -72,11 +76,19 @@ def validate_json(json_obj, schema=None, version=4):
         try:
             jsonschema.validate(instance=json_obj, schema=schema)
         except jsonschema.ValidationError as e:
-            logger.debug("failed to validate JSON document against schema: '{}'".format(e))
-            raise ValidationError(' '.join((_("Failed to validate JSON document against schema"), e.message)))
+            logger.debug(
+                "failed to validate JSON document against schema: '{}'".format(e)
+            )
+            raise ValidationError(
+                ' '.join(
+                    (_("Failed to validate JSON document against schema"), e.message)
+                )
+            )
         except jsonschema.SchemaError as e:
             logger.debug("failed to validate JSON schema document: '{}'".format(e))
-            raise ValidationError(' '.join((_("Failed to validate JSON schema document"), e.message)))
+            raise ValidationError(
+                ' '.join((_("Failed to validate JSON schema document"), e.message))
+            )
 
 
 @deconstructible
@@ -105,11 +117,11 @@ class JSONSchemaValidator(object):
 
     def __eq__(self, other):
         return (
-            isinstance(other, JSONSchemaValidator) and
-            self._schema == other._schema and
-            self._version == other._version and
-            (self.message == other.message) and
-            (self.code == other.code)
+            isinstance(other, JSONSchemaValidator)
+            and self._schema == other._schema
+            and self._version == other._version
+            and (self.message == other.message)
+            and (self.code == other.code)
         )
 
     def __ne__(self, other):

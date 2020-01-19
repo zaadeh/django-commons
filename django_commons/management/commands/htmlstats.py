@@ -3,6 +3,7 @@ from __future__ import unicode_literals, print_function, absolute_import
 
 import collections
 import json
+
 try:
     from html.parser import HTMLParser
 except ImportError:
@@ -39,11 +40,17 @@ class HTMLMetrics(object):
 
     def report(self):
         stats = collections.OrderedDict()
-        stats['tags'] = collections.OrderedDict(sorted(self.tags.items(), key=lambda item: item[0]))
+        stats['tags'] = collections.OrderedDict(
+            sorted(self.tags.items(), key=lambda item: item[0])
+        )
         stats['ntags'] = self.ntags
-        stats['attrs'] = collections.OrderedDict(sorted(self.attrs.items(), key=lambda item: item[0]))
+        stats['attrs'] = collections.OrderedDict(
+            sorted(self.attrs.items(), key=lambda item: item[0])
+        )
         stats['nattrs'] = self.nattrs
-        stats['tag_attrs'] = collections.OrderedDict(sorted(self.tag_attrs.items(), key=lambda item: item[0]))
+        stats['tag_attrs'] = collections.OrderedDict(
+            sorted(self.tag_attrs.items(), key=lambda item: item[0])
+        )
         stats['data_len'] = self.data_len
         stats['comments'] = self.comments
         stats['doctypes'] = self.doctypes
@@ -135,7 +142,9 @@ class Command(LabelCommand):
     content into it and where to look for them.
     """
 
-    help = "Parse the HTML content stored in a model field, showing a statistical report"
+    help = (
+        "Parse the HTML content stored in a model field, showing a statistical report"
+    )
     missing_args_message = "Enter at least one fully-qualified model field name."
     requires_migrations_checks = True
 
@@ -150,26 +159,37 @@ class Command(LabelCommand):
         self.options = options
         retval = super(Command, self).execute(*args, **options)
         if options['verbosity'] > 1:
-            self.stdout.write(self.style.WARNING("started at {}, took {}".format(
-                self.start_time, timezone.localtime() - self.start_time)))
+            self.stdout.write(
+                self.style.WARNING(
+                    "started at {}, took {}".format(
+                        self.start_time, timezone.localtime() - self.start_time
+                    )
+                )
+            )
         return retval
 
     def add_arguments(self, parser):
         super(Command, self).add_arguments(parser)
         parser.add_argument(
-            '--database', action='store', dest='database',
+            '--database',
+            action='store',
+            dest='database',
             default=DEFAULT_DB_ALIAS,
-            help='Specifies the database to use. Default is "default".'
+            help='Specifies the database to use. Default is "default".',
         )
         parser.add_argument(
-            '--single', action='store_true', dest='single',
+            '--single',
+            action='store_true',
+            dest='single',
             default=False,
-            help='Whether an HTML statistics report should be displayed for every single record'
+            help='Whether an HTML statistics report should be displayed for every single record',
         )
         parser.add_argument(
-            '--no-aggregate', action='store_true', dest='no_aggregate',
+            '--no-aggregate',
+            action='store_true',
+            dest='no_aggregate',
             default=False,
-            help='Whether an aggregated HTML statistics should be displayed'
+            help='Whether an aggregated HTML statistics should be displayed',
         )
 
     def parse_html(self, html):
@@ -189,16 +209,18 @@ class Command(LabelCommand):
         try:
             column = getattr(row, column_name)
         except AttributeError:
-            raise CommandError("column '{}' on model does not exist".format(
-                column_name))
+            raise CommandError(
+                "column '{}' on model does not exist".format(column_name)
+            )
 
         if column is None:
             self.stdout.write(self.style.WARNING("column is null"))
             column = ''
 
         if not isinstance(column, (str, unicode, bytes)):
-            raise CommandError("column '{}' must have a textual type".format(
-                column_name))
+            raise CommandError(
+                "column '{}' must have a textual type".format(column_name)
+            )
 
         html_processor = self.parse_html(column)
         return html_processor
@@ -224,7 +246,7 @@ class Command(LabelCommand):
 
         # TODO: add django-filter style queryset filtering and ordering
         #  except model_class.MultipleObjectsReturned as e:
-            #  raise CommandError(e)
+        #  raise CommandError(e)
 
     def handle_label(self, label, *args, **options):
         self.stdout.write("Processing '{}'".format(label))
@@ -232,18 +254,22 @@ class Command(LabelCommand):
         try:
             app_name, model_name, column_name = label.split('.', 3)
         except ValueError:
-            raise CommandError("label argument must be in the form of 'app.model.column'")
+            raise CommandError(
+                "label argument must be in the form of 'app.model.column'"
+            )
 
-        self.stdout.write("Parsing the HTML in model '{}.{}'".format(
-            model_name, column_name))
+        self.stdout.write(
+            "Parsing the HTML in model '{}.{}'".format(model_name, column_name)
+        )
 
         try:
             ct = ContentType.objects.get(app_label=app_name, model=model_name)
             self.stdout.write("Fetching from model: '{}'".format(ct.name))
             model_class = ct.model_class()
         except (ContentType.DoesNotExist, ContentType.MultipleObjectsReturned):
-            raise CommandError("failed to fetch the model for '{}.{}'".format(
-                app_name, model_name))
+            raise CommandError(
+                "failed to fetch the model for '{}.{}'".format(app_name, model_name)
+            )
 
         self.process_rows(model_class, column_name)
 

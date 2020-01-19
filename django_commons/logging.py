@@ -3,8 +3,10 @@ import logging.config  # needed when logging_config doesn't start with logging.c
 
 from django.contrib.auth import get_user_model
 
-from django_commons.middleware.thread_locals import (get_current_request,
-    get_current_user)
+from django_commons.middleware.thread_locals import (
+    get_current_request,
+    get_current_user,
+)
 
 
 class HttpRequestFilter(logging.Filter):
@@ -15,7 +17,9 @@ class HttpRequestFilter(logging.Filter):
     def filter(self, record):
         current_request = get_current_request()
         if hasattr(record, 'request'):
-            logger.warning("Will not overwrite an existing request attribute on the logging record")
+            logger.warning(
+                "Will not overwrite an existing request attribute on the logging record"
+            )
             return True
         record.request = current_request
         return True
@@ -41,7 +45,9 @@ class HttpUserFilter(logging.Filter):
     def filter(self, record):
         logged_in_user = get_current_user()
         if hasattr(record, 'username'):
-            logger.warning("Will not overwrite an existing username attribute on the logging record")
+            logger.warning(
+                "Will not overwrite an existing username attribute on the logging record"
+            )
             return True
         if not logged_in_user:
             record.username = '<anon>'
@@ -55,5 +61,6 @@ class AMQPLogHandler(logging.Handler):
     """
     Push the logging record into an AMQP message broker.
     """
+
     # TODO
     pass
