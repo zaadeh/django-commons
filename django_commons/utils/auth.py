@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function, absolute_import
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 import logging
 from functools import wraps
 
-from django.core.exceptions import PermissionDenied
-from django.utils.decorators import available_attrs
-from django.shortcuts import resolve_url
-from django.conf import settings
-from django.utils.six.moves.urllib.parse import urlparse
-from django.contrib.auth import REDIRECT_FIELD_NAME
-from django.contrib.auth.views import redirect_to_login
 import six
 
+from django.conf import settings
+from django.contrib.auth import REDIRECT_FIELD_NAME
+from django.contrib.auth.views import redirect_to_login
+from django.core.exceptions import PermissionDenied
+from django.shortcuts import resolve_url
+from django.utils.decorators import available_attrs
+from django.utils.six.moves.urllib.parse import urlparse
 
 logger = logging.getLogger(__name__)
 

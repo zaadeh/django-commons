@@ -2,7 +2,7 @@
 Taken from:
 https://medium.com/@hakibenita/how-to-add-a-text-filter-to-django-admin-5d1db93772d8
 """
-from __future__ import absolute_import, print_function, unicode_literals
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 import logging
 

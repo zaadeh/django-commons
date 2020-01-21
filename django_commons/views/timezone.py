@@ -1,8 +1,9 @@
-from __future__ import absolute_import, print_function, unicode_literals
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 import logging
 
 import pytz
+
 from django.conf import settings
 from django.contrib import messages
 from django.core.mail import send_mail

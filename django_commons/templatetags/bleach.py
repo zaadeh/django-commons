@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function, absolute_import
-
-from django import template
-from django.template.defaultfilters import stringfilter
-from django.utils.safestring import mark_safe
-from django.conf import settings
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 import bleach
 
+from django import template
+from django.conf import settings
+from django.template.defaultfilters import stringfilter
+from django.utils.safestring import mark_safe
 
 register = template.Library()
 

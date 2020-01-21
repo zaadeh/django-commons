@@ -1,7 +1,7 @@
-from __future__ import unicode_literals, print_function, absolute_import
+from __future__ import absolute_import, division, print_function, unicode_literals
 
-from django.utils.deprecation import MiddlewareMixin
 from django.middleware.csrf import rotate_token
+from django.utils.deprecation import MiddlewareMixin
 
 
 class CSRFRotateToken(MiddlewareMixin):

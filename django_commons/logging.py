@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import, division, print_function, unicode_literals
+
 import logging.config  # needed when logging_config doesn't start with logging.config
 
 from django.contrib.auth import get_user_model
-
 from django_commons.middleware.thread_locals import (
     get_current_request,
     get_current_user,

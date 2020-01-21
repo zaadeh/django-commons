@@ -1,20 +1,20 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function, absolute_import
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 import collections
 import json
+
+from django.contrib.contenttypes.models import ContentType
+from django.core.management import BaseCommand, CommandError
+from django.core.management.base import LabelCommand
+from django.db import DEFAULT_DB_ALIAS
+from django.utils import timezone
 
 try:
     from html.parser import HTMLParser
 except ImportError:
     # Python 2
     from HTMLParser import HTMLParser
-
-from django.core.management import BaseCommand, CommandError
-from django.core.management.base import LabelCommand
-from django.db import DEFAULT_DB_ALIAS
-from django.utils import timezone
-from django.contrib.contenttypes.models import ContentType
 
 
 class NotRunningInTTYException(Exception):

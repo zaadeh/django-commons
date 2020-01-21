@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function, absolute_import
+from __future__ import absolute_import, division, print_function, unicode_literals
+
 import logging
 
 import pytz
@@ -7,7 +8,6 @@ import pytz
 from django.conf import settings
 from django.utils import timezone
 from django.utils.deprecation import MiddlewareMixin
-
 
 logger = logging.getLogger(__name__)
 

@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function, absolute_import
+from __future__ import absolute_import, division, print_function, unicode_literals
 
-import logging
 import datetime
+import logging
 
 import pytz
 
 from django.utils import timezone
-
 
 logger = logging.getLogger(__name__)
 

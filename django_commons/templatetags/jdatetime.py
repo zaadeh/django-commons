@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function, absolute_import
-import datetime
+from __future__ import absolute_import, division, print_function, unicode_literals
 
-from django import template
+import datetime
 
 import jdatetime
 
+from django import template
 
 register = template.Library()
 

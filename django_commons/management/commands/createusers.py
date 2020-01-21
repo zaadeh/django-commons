@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function, absolute_import
+from __future__ import absolute_import, division, print_function, unicode_literals
 
-import sys
 import json
+import sys
 
+from django.contrib.auth import get_user_model
+from django.contrib.auth.management import get_default_username
+from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.password_validation import validate_password
 from django.core import exceptions
 from django.core.management import BaseCommand, CommandError
 from django.db import DEFAULT_DB_ALIAS
+from django.utils import timezone
 from django.utils.encoding import force_str
 from django.utils.text import capfirst
-from django.utils import timezone
-from django.contrib.auth.management import get_default_username
-from django.contrib.auth.password_validation import validate_password
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group, Permission
 
 
 class NotRunningInTTYException(Exception):

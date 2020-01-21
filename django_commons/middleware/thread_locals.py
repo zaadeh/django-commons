@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function, absolute_import
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 from threading import local
 
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ImproperlyConfigured, PermissionDenied
 from django.utils.deprecation import MiddlewareMixin
-from django.contrib.auth import get_user_model
-
 
 _thread_locals = local()
 

@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals, print_function, absolute_import
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 import logging
 
 from django import forms
 from django.http import HttpRequest
-
 
 logger = logging.getLogger(__name__)
 
