@@ -50,7 +50,7 @@ class HttpUserFilter(logging.Filter):
                 "Will not overwrite an existing username attribute on the logging record"
             )
             return True
-        if not logged_in_user:
+        if logged_in_user is None:
             record.username = '<anon>'
         else:
             assert isinstance(logged_in_user, get_user_model())
